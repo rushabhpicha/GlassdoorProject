@@ -154,7 +154,7 @@
                     android:transformPivotX="0dp"
                     android:transformPivotY="0dp"
                     android:isIndicator="true"
-                    android:max="5"
+                    android:max="4"
                     android:layout_gravity="center"
                     android:progressTint="#ff0000"
                     />
