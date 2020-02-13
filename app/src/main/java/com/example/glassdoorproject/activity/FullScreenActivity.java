@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.example.glassdoorproject.R;
 import com.example.glassdoorproject.dataModel.BasePay;
+import com.example.glassdoorproject.dataModel.InterviewModel;
 import com.example.glassdoorproject.dataModel.ReviewModel;
-
+import com.example.glassdoorproject.dataModel.SalaryModel;
+// In this activity we check the values of id and then appropriately look for the layout.
 public class FullScreenActivity extends AppCompatActivity {
 
     @Override
@@ -32,32 +34,37 @@ public class FullScreenActivity extends AppCompatActivity {
                 setSalaryData();
                 break;
             case 3:
-                setInterViewData();
                 setContentView(R.layout.interview_fullscreen);
+                setInterViewData();
                 break;
         }
     }
 
     private void setInterViewData() {
+        Bundle b = this.getIntent().getExtras();
+        if (b != null) {
+            InterviewModel interviewModel;
+            Bundle bundle = getIntent().getExtras();
+            interviewModel = bundle.getParcelable("InterviewData");
+            Log.i("Location", ""+interviewModel.getLocation());
+        }
     }
 
     private void setSalaryData() {
-        TextView tName = findViewById(R.id.salary);
+
+        SalaryModel salaryModel;
         Bundle bundle = getIntent().getExtras();
-        Intent intent = getIntent();
-        String value = intent.getExtras().getString("location");
-        String attributionURL = bundle.getString("attributionURL");
-        String jobTitle = bundle.getString("jobTitle");
-        String location = bundle.getString("location");
-        String sqLogoURL = bundle.getString("sqLogoURL");
-        BasePay basePay = bundle.getParcelable("basePay");
-        Float amount = basePay.getAmount();
-        Toast.makeText(this, ""+amount, Toast.LENGTH_SHORT).show();
-        Log.i("Location", location);
+        salaryModel = bundle.getParcelable("SalaryData");
+        Log.i("Employer name ", ""+salaryModel.getEmployerName());
 
     }
 
     private void setReviewData() {
+
+        ReviewModel reviewModel;
+        Bundle bundle = getIntent().getExtras();
+        reviewModel = bundle.getParcelable("ReviewData");
+        String advice = reviewModel.getAdvice();
 
         TextView treview = findViewById(R.id.review);
         TextView tpros = findViewById(R.id.pros);
@@ -66,25 +73,12 @@ public class FullScreenActivity extends AppCompatActivity {
         TextView tEmployeeName = findViewById(R.id.eName);
 
 
-        Bundle bundle = getIntent().getExtras();
-        String advice = bundle.getString("advice");
-        String approvalStatus = bundle.getString("approvalStatus");
-        String attributionURL = bundle.getString("attributionURL");
-        String pros = bundle.getString("pros").replaceAll("[+]","-");
-        String cons = bundle.getString("cons").replaceAll("[+]","-");
-        String employerName = bundle.getString("employerName");
-        String headline = bundle.getString("headline");
-        String location = bundle.getString("location");
-        String sqLogoURL = bundle.getString("sqLogoURL");
-        final Float workLifeBalanceRating = bundle.getFloat("workLifeBalanceRating");
-
-        treview.setText(advice);
-        tpros.setText(pros);
-        tcons.setText(cons);
-        tworkLifeBalance.setRating(workLifeBalanceRating);
+        treview.setText(reviewModel.getAdvice());
+        tpros.setText(reviewModel.getPros().replaceAll("[+]","-"));
+        tcons.setText(reviewModel.getCons().replaceAll("[+]","-"));
+        tworkLifeBalance.setRating(reviewModel.getWorkLifeBalanceRating());
         tworkLifeBalance.setEnabled(false);
-        tEmployeeName.setText("Review By :- "+employerName);
+        tEmployeeName.setText("Review By :- "+reviewModel.getEmployerName());
 
-//        Toast.makeText(this, ""+sqLogoURL, Toast.LENGTH_SHORT).show();
     }
 }

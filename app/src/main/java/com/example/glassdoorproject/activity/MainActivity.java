@@ -32,9 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    In this activity we are using Volley library to parse the Json Data from the URL.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    String TAG = "Response";
+    String TAG = "MainActivity";
     String tag_json_obj = "json_obj_req";
 
     String url = "https://raw.githubusercontent.com/vikrama/feed-json-sample/master/feed.json";
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecycleAdapter recycleAdapter;
     RecyclerView.LayoutManager layoutManager;
-
+    ProgressDialog pDialog;
+    boolean success;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,74 +63,75 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();
 
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-
         JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, response.toString());
-                       // Toast.makeText(MainActivity.this, ""+response.toString(), Toast.LENGTH_SHORT).show();
                         pDialog.hide();
-                            try {
-                                boolean success = response.getBoolean("success");
-                                if (success) {
-                                    JSONObject jsonObject = response.getJSONObject("response");
-                                    JSONArray aResults = jsonObject.getJSONArray("results");
+                        try {
+                            success = response.getBoolean("success");  // if the value of the success key is true we move further
+                            if (success) {
+                                JSONObject jsonObject = response.getJSONObject("response");
+                                JSONArray resultsArray = jsonObject.getJSONArray("results");
 
-                                    for (int i = 0; i < aResults.length(); i++) {
-                                        JSONObject oResponse = aResults.getJSONObject(i);
-                                        Log.i("Response3 ", oResponse + "");
-                                        String type = oResponse.getString("type");
-                                        Log.i("Type ", type);
-                                        if(type.equals("REVIEW_RESULT")){
-                                            JSONObject reviewResult = oResponse.getJSONObject("review");
-                                            Log.i("Review", reviewResult+"");
+                                // Iterating the results JSON Array
+                                for (int i = 0; i < resultsArray.length(); i++) {
+                                    JSONObject jsonObjectResponse = resultsArray.getJSONObject(i);
+                                    Log.i(TAG, jsonObjectResponse + "");
+                                    String type = jsonObjectResponse.getString("type");
+                                    Log.i(TAG, type);
 
-                                            if(reviewResult != null) {
-                                                
-                                                sendData();
-                                                reviewModelArrayList.clear();
-                                                universalList.add(new ReviewModel(reviewResult.getString("advice"), reviewResult.getString("approvalStatus"), reviewResult.getString("attributionURL"), 0.0f, "", 0.0f, 0.0f, reviewResult.getString("cons"), 0.0f, true, 0.0f, reviewResult.getString("employerName"), "", "", true, "", 0.0f, 0.0f, "", reviewResult.getString("jobTitle"), "", "", reviewResult.getString("location"), true, 0.0f, "", 0.0f, reviewResult.getString("pros"), true, "", 0.0f, reviewResult.getString("sqLogoUrl"), 0.0f, Float.valueOf(reviewResult.getString("workLifeBalanceRating"))));
-                                                recycleAdapter = new RecycleAdapter((ArrayList<Object>) universalList, MainActivity.this);
-                                                recyclerView.setAdapter(recycleAdapter);
-                                            }
-                                        }
-                                        if(type.equals("SALARY_RESULT")){
-                                            JSONObject salaryResult = oResponse.getJSONObject("salary");
-                                            JSONObject omeanBasePay = salaryResult.getJSONObject("meanBasePay");
-                                            JSONObject obasePay =salaryResult.getJSONObject("basePay");
+                                    /* Here we check the type of JSON Response. If the response is of Review type, we insert the ReviewModel inside our Universal
+                                    object. If the response type is Salary, we insert th SalaryModel, otherwise we insert the Interview Model */
+                                    if(type.equals("REVIEW_RESULT")){
+                                        JSONObject reviewResult = jsonObjectResponse.getJSONObject("review");
+                                        Log.i(TAG, reviewResult+"");
 
-                                            BasePay basePay = new BasePay(Float.valueOf(obasePay.getString("amount")), obasePay.getString("currencyCode"),obasePay.getString("name"), obasePay.getString("symbol"));
-                                            MeanBasePay meanBasePay = new MeanBasePay(Float.valueOf(omeanBasePay.getString("amount")), omeanBasePay.getString("currencyCode"),omeanBasePay.getString("name"), omeanBasePay.getString("symbol"));
-                                            salaryModelArrayList.clear();
-                                            universalList.add(new SalaryModel(salaryResult.getString("attributionURL"), basePay, 0.0f, salaryResult.getString("employerName"), "", 0.0f, salaryResult.getString("jobTitle"), salaryResult.getString("location"), meanBasePay, "", 0.0f, "", "", salaryResult.getString("sqLogoUrl")));
-                                            recycleAdapter = new RecycleAdapter((ArrayList<Object>) universalList, MainActivity.this);
-                                            recycleAdapter.notifyDataSetChanged();
-                                        }
-                                        if(type.equals("INTERVIEW_RESULT")){
-                                            JSONObject interviewResult = oResponse.getJSONObject("interview");
-                                            Log.i("Interview", interviewResult+"");
-                                            JSONArray questions = interviewResult.getJSONArray("questions");
-                                            Log.i("Questions", questions+"");
-                                            interviewModelArrayList.clear();
-                                            universalList.add(new InterviewModel(interviewResult.getString("approvalStatus"), interviewResult.getString("attributionURL"), Float.valueOf(interviewResult.getString("employerId")), interviewResult.getString("employerName"), interviewResult.getBoolean("featuredReview"), Float.valueOf(interviewResult.getString("helpfulCount")), Float.valueOf(interviewResult.getString("id")), interviewResult.getString("interviewDate"), interviewResult.getString("interviewSource"), interviewResult.getString("interviewSteps"), interviewResult.getString("jobTitle"), interviewResult.getString("location"), interviewResult.getString("negotiationDetails"), interviewResult.getBoolean("newReview"), Float.valueOf(interviewResult.getString("notHelpfulCount")), interviewResult.getString("otherSteps"), interviewResult.getString("outcome"), interviewResult.getString("processAnswer"), interviewResult.getString("processDifficulty"), interviewResult.getString("processInterviewExperience"), Float.valueOf(interviewResult.getString("processLength")), interviewResult.getString("processOverallExperience"), null, interviewResult.getString("reasonForDeclining"), interviewResult.getString("reviewDateTime"), interviewResult.getString("reviewDateTime"), interviewResult.getString("testSteps"), Float.valueOf(interviewResult.getString("totalHelpfulCount"))));
-                                            recycleAdapter = new RecycleAdapter((ArrayList<Object>) universalList, MainActivity.this);
-                                            recycleAdapter.notifyDataSetChanged();
+                                        if(reviewResult != null) {
+                                            reviewModelArrayList.clear();  //clearing the arraylist everytime before updating it
+                                            universalList.add(new ReviewModel(reviewResult.getString("advice"), reviewResult.getString("approvalStatus"), reviewResult.getString("attributionURL"), 0.0f, "", 0.0f, 0.0f, reviewResult.getString("cons"), 0.0f, true, 0.0f, reviewResult.getString("employerName"), "", "", true, reviewResult.getString("headline"), 0.0f, 0.0f, "", reviewResult.getString("jobTitle"), "", "", reviewResult.getString("location"), true, 0.0f, "", Float.valueOf(reviewResult.getString("overallNumeric")), reviewResult.getString("pros"), true, "", 0.0f, reviewResult.getString("sqLogoUrl"), 0.0f, Float.valueOf(reviewResult.getString("workLifeBalanceRating"))));
                                         }
                                     }
+                                    if(type.equals("SALARY_RESULT")){
+                                        JSONObject salaryResult = jsonObjectResponse.getJSONObject("salary");
+                                        JSONObject salaryMeanBasePay = salaryResult.getJSONObject("meanBasePay");// retrieving the Mean Pay from Salary Resullt
+                                        JSONObject salaryBasePay =salaryResult.getJSONObject("basePay");// retrieving the base pay from Salary Result
 
-                                    Log.i("Response1 ", jsonObject + "");
-                                    Log.i("Response2 ", aResults + "");
+                                        BasePay basePay = new BasePay(Float.valueOf(salaryBasePay.getString("amount")), salaryBasePay.getString("currencyCode"),salaryBasePay.getString("name"), salaryBasePay.getString("symbol"));
+                                        MeanBasePay meanBasePay = new MeanBasePay(Float.valueOf(salaryMeanBasePay.getString("amount")), salaryMeanBasePay.getString("currencyCode"),salaryMeanBasePay.getString("name"), salaryMeanBasePay.getString("symbol"));
+                                        if(salaryResult != null) {
+                                            salaryModelArrayList.clear();
+                                            universalList.add(new SalaryModel(salaryResult.getString("attributionURL"), basePay, 0.0f, salaryResult.getString("employerName"), "", 0.0f, salaryResult.getString("jobTitle"), salaryResult.getString("location"), meanBasePay, "", 0.0f, "", "", salaryResult.getString("sqLogoUrl")));
+                                        }
+                                    }
+                                    if(type.equals("INTERVIEW_RESULT")){
+                                        JSONObject interviewResult = jsonObjectResponse.getJSONObject("interview");
+                                        Log.i(TAG, interviewResult+"");
+                                        JSONArray questions = interviewResult.getJSONArray("questions");
+                                        Log.i(TAG, questions+"");
+                                        if(interviewResult != null) {
+                                            interviewModelArrayList.clear();
+                                            universalList.add(new InterviewModel(interviewResult.getString("approvalStatus"), interviewResult.getString("attributionURL"), Float.valueOf(interviewResult.getString("employerId")), interviewResult.getString("employerName"), interviewResult.getBoolean("featuredReview"), Float.valueOf(interviewResult.getString("helpfulCount")), Float.valueOf(interviewResult.getString("id")), interviewResult.getString("interviewDate"), interviewResult.getString("interviewSource"), interviewResult.getString("interviewSteps"), interviewResult.getString("jobTitle"), interviewResult.getString("location"), interviewResult.getString("negotiationDetails"), interviewResult.getBoolean("newReview"), Float.valueOf(interviewResult.getString("notHelpfulCount")), interviewResult.getString("otherSteps"), interviewResult.getString("outcome"), interviewResult.getString("processAnswer"), interviewResult.getString("processDifficulty"), interviewResult.getString("processInterviewExperience"), Float.valueOf(interviewResult.getString("processLength")), interviewResult.getString("processOverallExperience"), null, interviewResult.getString("reasonForDeclining"), interviewResult.getString("reviewDateTime"), interviewResult.getString("reviewDateTime"), interviewResult.getString("testSteps"), Float.valueOf(interviewResult.getString("totalHelpfulCount"))));
+                                        }
+                                    }
+                                    //Calling the Constructor of Recycle Adapter
+                                    recycleAdapter = new RecycleAdapter((ArrayList<Object>) universalList, MainActivity.this);
+                                    recyclerView.setAdapter(recycleAdapter);
+                                }
 
-                                }
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
+                                Log.i( TAG, jsonObject + "");
+                                Log.i( TAG, resultsArray + "");
+
+                            }
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -137,9 +142,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonobjectRequest);
-
-    }
-
-    private void sendData() {
     }
 }

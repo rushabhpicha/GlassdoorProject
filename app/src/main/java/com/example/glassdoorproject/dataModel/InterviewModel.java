@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-public class InterviewModel {
+public class InterviewModel implements Parcelable {
         private String approvalStatus;
         private String attributionURL;
         private float employerId;
@@ -67,10 +67,57 @@ public class InterviewModel {
         private String testSteps = null;
         private float totalHelpfulCount;
 
+        public InterviewModel() {
 
-        // Getter Methods
+        }
 
-        public String getApprovalStatus() {
+
+    // Getter Methods
+
+    protected InterviewModel(Parcel in) {
+        approvalStatus = in.readString();
+        attributionURL = in.readString();
+        employerId = in.readFloat();
+        employerName = in.readString();
+        featuredReview = in.readByte() != 0;
+        helpfulCount = in.readFloat();
+        id = in.readFloat();
+        interviewDate = in.readString();
+        interviewSource = in.readString();
+        interviewSteps = in.readString();
+        jobTitle = in.readString();
+        location = in.readString();
+        negotiationDetails = in.readString();
+        newReview = in.readByte() != 0;
+        notHelpfulCount = in.readFloat();
+        otherSteps = in.readString();
+        outcome = in.readString();
+        processAnswer = in.readString();
+        processDifficulty = in.readString();
+        processInterviewExperience = in.readString();
+        processLength = in.readFloat();
+        processOverallExperience = in.readString();
+        interViewQuestionsModel = in.readParcelable(InterViewQuestionsModel.class.getClassLoader());
+        reasonForDeclining = in.readString();
+        reviewDateTime = in.readString();
+        sqLogoUrl = in.readString();
+        testSteps = in.readString();
+        totalHelpfulCount = in.readFloat();
+    }
+
+    public static final Creator<InterviewModel> CREATOR = new Creator<InterviewModel>() {
+        @Override
+        public InterviewModel createFromParcel(Parcel in) {
+            return new InterviewModel(in);
+        }
+
+        @Override
+        public InterviewModel[] newArray(int size) {
+            return new InterviewModel[size];
+        }
+    };
+
+    public String getApprovalStatus() {
             return approvalStatus;
         }
 
@@ -293,6 +340,43 @@ public class InterviewModel {
         }
     public void setInterViewQuestionsModel(InterViewQuestionsModel interViewQuestionsModel) {
         this.interViewQuestionsModel = interViewQuestionsModel;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(approvalStatus);
+        dest.writeString(attributionURL);
+        dest.writeFloat(employerId);
+        dest.writeString(employerName);
+        dest.writeByte((byte) (featuredReview ? 1 : 0));
+        dest.writeFloat(helpfulCount);
+        dest.writeFloat(id);
+        dest.writeString(interviewDate);
+        dest.writeString(interviewSource);
+        dest.writeString(interviewSteps);
+        dest.writeString(jobTitle);
+        dest.writeString(location);
+        dest.writeString(negotiationDetails);
+        dest.writeByte((byte) (newReview ? 1 : 0));
+        dest.writeFloat(notHelpfulCount);
+        dest.writeString(otherSteps);
+        dest.writeString(outcome);
+        dest.writeString(processAnswer);
+        dest.writeString(processDifficulty);
+        dest.writeString(processInterviewExperience);
+        dest.writeFloat(processLength);
+        dest.writeString(processOverallExperience);
+        dest.writeParcelable(interViewQuestionsModel, flags);
+        dest.writeString(reasonForDeclining);
+        dest.writeString(reviewDateTime);
+        dest.writeString(sqLogoUrl);
+        dest.writeString(testSteps);
+        dest.writeFloat(totalHelpfulCount);
     }
 }
 

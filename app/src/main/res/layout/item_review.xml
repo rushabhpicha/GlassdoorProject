@@ -71,14 +71,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
-                android:layout_weight="1">
+                android:layout_weight="1.3">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Headline:-"
+                    android:text="Short Review:-"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textStyle="bold"
@@ -149,10 +149,15 @@
                     android:textColor="#000000"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center"
-                    android:textSize="14dp"
-                    android:numStars="4"
-                    android:stepSize="1.0"
-                    android:rating="2.0"/>
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp"
+                    android:isIndicator="true"
+                    android:max="5"
+                    android:layout_gravity="center"
+                    android:progressTint="#ff0000"
+                    />
 
             </LinearLayout>
             <LinearLayout
@@ -180,7 +185,7 @@
                     android:textColor="#000000"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center"
-                    android:textSize="18dp"/>
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </LinearLayout>

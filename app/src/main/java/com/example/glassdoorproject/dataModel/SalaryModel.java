@@ -1,6 +1,9 @@
 package com.example.glassdoorproject.dataModel;
 
-public class SalaryModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class SalaryModel implements Parcelable {
         private String attributionURL;
         BasePay BasePayObject;
         private float employerId;
@@ -33,7 +36,40 @@ public class SalaryModel {
         this.sqLogoUrl = sqLogoUrl;
     }
 
-        public String getAttributionURL() {
+    public SalaryModel() {
+
+    }
+
+    protected SalaryModel(Parcel in) {
+        attributionURL = in.readString();
+        BasePayObject = in.readParcelable(BasePay.class.getClassLoader());
+        employerId = in.readFloat();
+        employerName = in.readString();
+        employmentStatus = in.readString();
+        id = in.readFloat();
+        jobTitle = in.readString();
+        location = in.readString();
+        MeanBasePayObject = in.readParcelable(MeanBasePay.class.getClassLoader());
+        payDeltaLocationType = in.readString();
+        payDeltaPercent = in.readFloat();
+        payPeriod = in.readString();
+        reviewDateTime = in.readString();
+        sqLogoUrl = in.readString();
+    }
+
+    public static final Creator<SalaryModel> CREATOR = new Creator<SalaryModel>() {
+        @Override
+        public SalaryModel createFromParcel(Parcel in) {
+            return new SalaryModel(in);
+        }
+
+        @Override
+        public SalaryModel[] newArray(int size) {
+            return new SalaryModel[size];
+        }
+    };
+
+    public String getAttributionURL() {
             return attributionURL;
         }
 
@@ -144,6 +180,29 @@ public class SalaryModel {
         public void setSqLogoUrl(String sqLogoUrl) {
             this.sqLogoUrl = sqLogoUrl;
         }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(attributionURL);
+        dest.writeParcelable(BasePayObject, flags);
+        dest.writeFloat(employerId);
+        dest.writeString(employerName);
+        dest.writeString(employmentStatus);
+        dest.writeFloat(id);
+        dest.writeString(jobTitle);
+        dest.writeString(location);
+        dest.writeParcelable(MeanBasePayObject, flags);
+        dest.writeString(payDeltaLocationType);
+        dest.writeFloat(payDeltaPercent);
+        dest.writeString(payPeriod);
+        dest.writeString(reviewDateTime);
+        dest.writeString(sqLogoUrl);
+    }
+}
 
 
