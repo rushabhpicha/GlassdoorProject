@@ -2,8 +2,7 @@ package com.example.glassdoorproject.dataModel;
 
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,14 +11,9 @@ import org.parceler.ParcelConstructor;
 
 @Parcel
 public class ReviewModel implements Parcelable{
-        @SerializedName("advice")
-        @Expose
+
         private String advice = "";
-        @SerializedName("approvalStatus")
-        @Expose
         private String approvalStatus = "";
-        @SerializedName("attributionURL")
-        @Expose
         private String attributionURL = "";
         private float careerOpportunitiesRating;
         private String ceoApproval = "";

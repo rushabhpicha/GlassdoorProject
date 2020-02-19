@@ -23,7 +23,7 @@ import com.example.glassdoorproject.dataModel.InterviewModel;
 import com.example.glassdoorproject.dataModel.MeanBasePay;
 import com.example.glassdoorproject.dataModel.ReviewModel;
 import com.example.glassdoorproject.dataModel.SalaryModel;
-import com.google.gson.JsonObject;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         if(reviewResult != null) {
                                             reviewModelArrayList.clear();  //clearing the arraylist everytime before updating it
-                                            universalList.add(new ReviewModel(reviewResult.getString("advice"), reviewResult.getString("approvalStatus"), reviewResult.getString("attributionURL"), 0.0f, "", 0.0f, 0.0f, reviewResult.getString("cons"), 0.0f, true, 0.0f, reviewResult.getString("employerName"), "", "", true, reviewResult.getString("headline"), 0.0f, 0.0f, "", reviewResult.getString("jobTitle"), "", "", reviewResult.getString("location"), true, 0.0f, "", Float.valueOf(reviewResult.getString("overallNumeric")), reviewResult.getString("pros"), true, "", 0.0f, reviewResult.getString("sqLogoUrl"), 0.0f, Float.valueOf(reviewResult.getString("workLifeBalanceRating"))));
+                                            universalList.add(new ReviewModel(reviewResult.getString("advice"), reviewResult.getString("approvalStatus"), reviewResult.getString("attributionURL"), 0.0f, "", 0.0f, 0.0f, reviewResult.getString("cons"), Float.valueOf(reviewResult.getString("cultureAndValuesRating")), true, 0.0f, reviewResult.getString("employerName"), "", "", true, reviewResult.getString("headline"), 0.0f, 0.0f, "", reviewResult.getString("jobTitle"), "", "", reviewResult.getString("location"), true, 0.0f, reviewResult.getString("overall"), Float.valueOf(reviewResult.getString("overallNumeric")), reviewResult.getString("pros"), true, "", 0.0f, reviewResult.getString("sqLogoUrl"), 0.0f, Float.valueOf(reviewResult.getString("workLifeBalanceRating"))));
                                         }
                                     }
                                     if(type.equals("SALARY_RESULT")){

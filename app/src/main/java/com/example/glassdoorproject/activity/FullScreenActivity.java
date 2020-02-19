@@ -15,7 +15,8 @@ import com.example.glassdoorproject.dataModel.BasePay;
 import com.example.glassdoorproject.dataModel.InterviewModel;
 import com.example.glassdoorproject.dataModel.ReviewModel;
 import com.example.glassdoorproject.dataModel.SalaryModel;
-// In this activity we check the values of id and then appropriately look for the layout.
+
+// In this activity we check the values of id and then appropriately look for the layout and call there implementation methods.
 public class FullScreenActivity extends AppCompatActivity {
 
     @Override
@@ -46,7 +47,8 @@ public class FullScreenActivity extends AppCompatActivity {
             InterviewModel interviewModel;
             Bundle bundle = getIntent().getExtras();
             interviewModel = bundle.getParcelable("InterviewData");
-            Log.i("Location", ""+interviewModel.getLocation());
+            TextView tinterview = findViewById(R.id.interview);
+            tinterview.setText("Interview By :- "+interviewModel.getEmployerName());
         }
     }
 
@@ -55,7 +57,8 @@ public class FullScreenActivity extends AppCompatActivity {
         SalaryModel salaryModel;
         Bundle bundle = getIntent().getExtras();
         salaryModel = bundle.getParcelable("SalaryData");
-        Log.i("Employer name ", ""+salaryModel.getEmployerName());
+        TextView tsalary = findViewById(R.id.salary);
+        tsalary.setText("Salary By :- "+salaryModel.getEmployerName());
 
     }
 
@@ -70,15 +73,25 @@ public class FullScreenActivity extends AppCompatActivity {
         TextView tpros = findViewById(R.id.pros);
         TextView tcons = findViewById(R.id.cons);
         RatingBar tworkLifeBalance = findViewById(R.id.wlb);
-        TextView tEmployeeName = findViewById(R.id.eName);
+        TextView temployeeName = findViewById(R.id.eName);
+        RatingBar roverallRating = findViewById(R.id.overallrating);
+        RatingBar rvalues = findViewById(R.id.valuesrating);
+        TextView overall = findViewById(R.id.overall);
+        TextView location = findViewById(R.id.location);
 
-
-        treview.setText(reviewModel.getAdvice());
+        if(advice != null || !advice.isEmpty()) {
+            treview.setText(advice);
+        }
         tpros.setText(reviewModel.getPros().replaceAll("[+]","-"));
         tcons.setText(reviewModel.getCons().replaceAll("[+]","-"));
         tworkLifeBalance.setRating(reviewModel.getWorkLifeBalanceRating());
         tworkLifeBalance.setEnabled(false);
-        tEmployeeName.setText("Review By :- "+reviewModel.getEmployerName());
-
+        temployeeName.setText("Review By :- "+reviewModel.getEmployerName());
+        roverallRating.setRating(reviewModel.getOverallNumeric());
+        tworkLifeBalance.setEnabled(false);
+        rvalues.setRating(reviewModel.getCultureAndValuesRating());
+        rvalues.setEnabled(false);
+        overall.setText(reviewModel.getOverall());
+        location.setText(reviewModel.getLocation());
     }
 }
