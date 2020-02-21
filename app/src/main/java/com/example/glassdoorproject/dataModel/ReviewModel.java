@@ -9,35 +9,35 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
-@Parcel
+
 public class ReviewModel implements Parcelable{
 
-        private String advice = "";
-        private String approvalStatus = "";
-        private String attributionURL = "";
+        private String advice;
+        private String approvalStatus;
+        private String attributionURL;
         private float careerOpportunitiesRating;
-        private String ceoApproval = "";
+        private String ceoApproval;
         private float ceoRating;
         private float compensationAndBenefitsRating;
-        private String cons = "";
+        private String cons;
         private float cultureAndValuesRating;
         private boolean currentJob;
         private float employerId;
-        private String employerName = "";
-        private String employerResponse = "";
-        private String employmentStatus = "";
+        private String employerName;
+        private String employerResponse;
+        private String employmentStatus;
         private boolean featuredReview;
-        private String headline = "";
+        private String headline;
         private float helpfulCount;
         private float id;
-        private String jobInformation = "";
+        private String jobInformation;
         private String jobTitle;
-        private String jobTitleFromDb = "";
-        private String lengthOfEmployment = "";
-        private String location = "";
+        private String jobTitleFromDb;
+        private String lengthOfEmployment;
+        private String location;
         private boolean newReview;
         private float notHelpfulCount;
-        private String overall = "";
+        private String overall;
         private float overallNumeric;
         @SerializedName("pros")
         @Expose
