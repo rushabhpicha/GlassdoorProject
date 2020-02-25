@@ -7,4 +7,4 @@ in bundle of data models.
 
 2. Picasso:- This library is used to load image into imageView coming as URL from the server.
 
-3. Parceler:- This library is used to send data model classes(POJO) from adapter to fragment.
+3. Parceler:- This library is used to send data model classes(POJO) from adapter to the activity.
